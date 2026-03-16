@@ -1,79 +1,95 @@
-# NEURON — Distributed Computing Platform
+# NEURON — OpenClaw's Autonomous Trading System
 
-A decentralized network of computational nodes for distributed task execution, dynamic resource allocation, and secure peer-to-peer communication.
+NEURON is OpenClaw's own version of the SYNAPSE trading architecture. An autonomous, AI-powered trading and portfolio management system.
 
 ## Architecture
 
 ```
 ┌──────────────────────────────────────────────────┐
-│               NEURON ORCHESTRATOR                │
-│  Central coordinator for all subsystems          │
-├──────────┬──────────┬──────────┬────────────────┤
-│ NETWORK  │  TASKS   │RESOURCES │   SECURITY     │
-│ P2P comm │ Distrib. │ CPU/Mem  │   Auth/Enc     │
-│ Async IO │ Queue    │ Monitor  │   TLS/Tokens   │
-├──────────┴──────┬───┴──────────┴────────────────┤
-│   DISCOVERY     │        LOAD BALANCER           │
-│   Peer finding  │   Smart work distribution      │
-│   Health checks │   Capacity-aware routing        │
-└─────────────────┴────────────────────────────────┘
+│                 NEURON CORE                      │
+│  OpenClaw's Autonomous Trading Intelligence      │
+├──────────────┬───────────────┬───────────────────┤
+│  MARKET DATA │   AI ENGINE   │  RISK MANAGEMENT  │
+│  Multi-feed  │  Multi-model  │  Position sizing  │
+│  Real-time   │  Consensus    │  Stop-loss mgmt   │
+├──────────────┼───────────────┼───────────────────┤
+│   STRATEGY   │   EXECUTOR    │    PORTFOLIO      │
+│  Multi-strat │  Alpaca API   │  Tracking + P&L   │
+│  Signals     │  Order mgmt   │  Rebalancing      │
+├──────────────┴───────────────┴───────────────────┤
+│              REPORTING + ALERTS                   │
+│  Telegram notifications, logs, audit trail        │
+└──────────────────────────────────────────────────┘
 ```
 
 ## Modules
 
 | Module | Description |
 |--------|------------|
-| `neuron.network` | Async P2P messaging, connection pool, message routing |
-| `neuron.discovery` | Peer discovery via broadcast, registry, and heartbeats |
-| `neuron.tasks` | Task serialization, distribution, results aggregation |
-| `neuron.resources` | CPU/memory/disk monitoring, capacity reporting |
-| `neuron.security` | Token auth, message signing, encrypted channels |
-| `neuron.balancer` | Load-aware task routing, weighted distribution |
+| `neuron.data` | Market data aggregation (Polygon, Finnhub, Alpha Vantage, TwelveData, CoinMarketCap) |
+| `neuron.ai` | Multi-model AI engine (Claude, Grok, OpenAI) with consensus voting |
+| `neuron.strategy` | Trading strategies (momentum, mean-reversion, breakout, sentiment) |
+| `neuron.risk` | Risk management, position sizing, stop-losses, max drawdown protection |
+| `neuron.executor` | Alpaca order execution, order management, fills tracking |
+| `neuron.portfolio` | Portfolio tracking, P&L calculation, rebalancing |
+| `neuron.alerts` | Telegram notifications, signal alerts, daily reports |
 
 ## Quick Start
 
 ```bash
-# Install
 pip install -e .
 
-# Start a node
-neuron start --port 8400 --name worker-1
+# Run a scan (dry run)
+neuron scan --dry-run
 
-# Join a network
-neuron join --seed 192.168.1.10:8400
+# Execute trades
+neuron trade
 
-# Submit a task
-neuron submit --task "compute" --payload '{"fn": "sum", "data": [1,2,3]}'
+# Check portfolio
+neuron portfolio
 
-# Check cluster status
-neuron status
+# Get AI consensus on a ticker
+neuron analyze NVDA
+
+# Start autonomous mode
+neuron daemon --interval 60
 ```
+
+## Strategies
+
+- **Momentum** — RSI + MACD trend following
+- **Mean Reversion** — Bollinger Band bounces
+- **Breakout** — Volume + price breakout detection
+- **Sentiment** — News-driven signals via AI analysis
+- **Consensus** — Multi-model AI voting (Claude + Grok + GPT)
 
 ## Configuration
 
 ```yaml
-# config/neuron.yaml
-node:
-  name: worker-1
-  port: 8400
-  role: worker  # worker | coordinator | hybrid
+trading:
+  account: alpaca
+  mode: paper  # paper | live
+  max_position_pct: 5
+  max_portfolio_risk: 20
+  stop_loss_pct: 3
+  take_profit_pct: 8
 
-network:
-  max_peers: 50
-  heartbeat_interval: 10
-  message_timeout: 30
+strategies:
+  - momentum
+  - sentiment
+  - consensus
 
-security:
-  auth_enabled: true
-  encryption: aes-256-gcm
-  token_expiry: 3600
+data_sources:
+  - polygon
+  - finnhub
+  - alpha_vantage
 
-resources:
-  cpu_threshold: 85
-  memory_threshold: 90
-  report_interval: 5
+ai_models:
+  - claude
+  - grok
+  - openai
 ```
 
 ## License
 
-MIT — Bernard Dario
+MIT — Bernard Dario / OpenClaw
