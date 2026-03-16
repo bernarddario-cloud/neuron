@@ -1,0 +1,14 @@
+{
+    "name": "neuron-default",
+    "host": "0.0.0.0",
+    "port": 8400,
+    "role": "hybrid",
+    "max_peers": 50,
+    "heartbeat_interval": 10,
+    "resource_interval": 5,
+    "max_tasks": 10,
+    "cluster_secret": "",
+    "seed_nodes": [],
+    "auth_enabled": true,
+    "balancer_strategy": "weighted_capacity"
+}
