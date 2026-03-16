@@ -112,6 +112,24 @@ Be decisive. No hedging."""
             logger.error(f"OpenAI error: {e}")
             return ""
 
+    def _call_groq(self, prompt: str, max_tokens: int = 800) -> str:
+        key = self.keys.get("groq")
+        if not key: return ""
+        try:
+            data = json.dumps({
+                "model": "llama-3.3-70b-versatile", "max_tokens": max_tokens,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.3
+            }).encode()
+            req = urllib.request.Request("https://api.groq.com/openai/v1/chat/completions",
+                data=data, method="POST",
+                headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+            resp = urllib.request.urlopen(req, timeout=30)
+            return json.loads(resp.read())["choices"][0]["message"]["content"]
+        except Exception as e:
+            logger.error(f"Groq error: {e}")
+            return ""
+
     def _parse_signal(self, model: str, response: str) -> AISignal:
         """Parse JSON signal from AI response."""
         try:
@@ -140,7 +158,7 @@ Be decisive. No hedging."""
                         reasoning=response[:200], raw_response=response[:500])
 
     def analyze(self, symbol: str, market_data: str) -> ConsensusSignal:
-        """Multi-model consensus analysis. All 3 AIs vote in parallel."""
+        """Multi-model consensus analysis. All available AIs vote in parallel."""
         prompt = self.TRADE_PROMPT.format(symbol=symbol, market_data=market_data)
         results = {}
         threads = []
@@ -149,7 +167,7 @@ Be decisive. No hedging."""
             results[name] = call_fn(prompt)
 
         for name, fn in [("Claude", self._call_claude), ("Grok", self._call_grok),
-                         ("OpenAI", self._call_openai)]:
+                         ("OpenAI", self._call_openai), ("Groq", self._call_groq)]:
             t = threading.Thread(target=ask, args=(name, fn))
             t.start()
             threads.append(t)

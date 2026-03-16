@@ -53,6 +53,7 @@ class NeuronCore:
             "anthropic": config.get("anthropic_key"),
             "xai": config.get("xai_key"),
             "openai": config.get("openai_key"),
+            "groq": config.get("groq_key"),
         })
 
         self.strategy = StrategyEngine()
@@ -85,13 +86,14 @@ class NeuronCore:
         return cls({
             "polygon_key": e("POLYGON_API_KEY"),
             "finnhub_key": e("FINNHUB_API_KEY"),
-            "twelvedata_key": e("TWELVE_DATA_API_KEY"),
+            "twelvedata_key": e("TWELVEDATA_API_KEY"),
             "alpha_vantage_key": e("ALPHA_VANTAGE_API_KEY"),
             "coinmarketcap_key": e("COINMARKETCAP_API_KEY"),
-            "newsapi_key": e("NEWS_API_KEY"),
+            "newsapi_key": e("NEWSAPI_KEY"),
             "anthropic_key": e("ANTHROPIC_API_KEY"),
             "xai_key": e("XAI_API_KEY"),
             "openai_key": e("OPENAI_API_KEY"),
+            "groq_key": e("GROQ_API_KEY"),
             "alpaca_key": e("ALPACA_API_KEY"),
             "alpaca_secret": e("ALPACA_SECRET_KEY"),
             "alpaca_base_url": e("ALPACA_BASE_URL", "https://api.alpaca.markets"),
@@ -223,7 +225,7 @@ class NeuronCore:
 
     def status(self) -> dict:
         return {
-            "version": "0.2.0",
+            "version": "1.0.0",
             "watchlist": len(self.watchlist),
             "risk": self.risk.status(),
             "portfolio": self.portfolio.to_dict(),
